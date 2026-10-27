@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Évaluation ATLS - Station Pratique Patient B (Nouakchott)</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --danger: #dc2626;
+            --danger-bg: #fef2f2;
+            --success: #16a34a;
+            --success-bg: #f0fdf4;
+            --warning: #d97706;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-600: #475569;
+            --slate-800: #1e293b;
+            --card-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8fafc;
+            color: var(--slate-800);
+            margin: 0;
+            padding: 16px;
+            padding-bottom: 120px;
+        }
+
+        .header-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--card-shadow);
+            border-left: 6px solid var(--primary);
+        }
+
+        .header-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0 0 6px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-subtitle {
+            font-size: 0.9rem;
+            color: var(--slate-600);
+            margin: 0 0 12px 0;
+        }
+
+        .meta-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--slate-600);
+            margin-bottom: 3px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 0.95rem;
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            background: #fff;
+        }
+
+        /* Script MIST Accordion */
+        .mist-card {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .mist-header {
+            padding: 12px 16px;
+            background: #dbeafe;
+            font-weight: 700;
+            color: #1e40af;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+        }
+
+        .mist-content {
+            padding: 14px 16px;
+            font-size: 0.92rem;
+            line-height: 1.45;
+            color: #1e293b;
+        }
+
+        .mist-item {
+            margin-bottom: 8px;
+        }
+        .mist-item strong {
+            color: #1e3a8a;
+        }
+
+        /* Fatal error alerts */
+        .fatal-card {
+            background: var(--danger-bg);
+            border: 2px solid var(--danger);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+        }
+
+        .fatal-card h3 {
+            margin: 0 0 8px 0;
+            color: var(--danger);
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .fatal-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            background: white;
+            border: 1px solid #fca5a5;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .fatal-item input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--danger);
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .fatal-item label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #991b1b;
+            cursor: pointer;
+        }
+
+        /* Sections and checklist */
+        .section-box {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            border: 1px solid var(--slate-200);
+        }
+
+        .section-title {
+            padding: 10px 16px;
+            background: var(--slate-100);
+            color: var(--slate-800);
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--slate-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--slate-100);
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+
+        .check-item:last-child {
+            border-bottom: none;
+        }
+
+        .check-item:active {
+            background-color: #f1f5f9;
+        }
+
+        .check-item.checked {
+            background-color: #f0fdf4;
+        }
+
+        .check-item input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--success);
+            margin-right: 14px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .item-text {
+            flex-grow: 1;
+            font-size: 0.9rem;
+            line-height: 1.35;
+        }
+
+        .item-points {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            background: #eff6ff;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-left: 8px;
+            white-space: nowrap;
+        }
+
+        /* Fixed Footer on iPad */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            border-top: 1px solid var(--slate-200);
+            padding: 10px 16px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+
+        .score-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .score-label {
+            font-size: 0.75rem;
+            color: var(--slate-600);
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .score-number {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--slate-800);
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-admis {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 1px solid #86efac;
+        }
+
+        .badge-refuse {
+            background: #fff1f2;
+            color: #be123c;
+            border: 1px solid #fecdd3;
+        }
+
+        .badge-fatal {
+            background: var(--danger);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        .reset-btn {
+            background: var(--slate-100);
+            border: 1px solid var(--slate-200);
+            color: var(--slate-600);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .actor-clues {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            margin-bottom: 14px;
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-card">
+        <div class="header-title">
+            <span>Évaluation ATLS — Cas Pratique : Patient B</span>
+            <button class="reset-btn" onclick="resetForm()">Réinitialiser</button>
+        </div>
+        <p class="header-subtitle">Examen pratique Nouakchott • Seuil de validation : ≥ 70 % (70 / 100 pts) sans faute fatale</p>
+        <div class="meta-inputs">
+            <div class="input-group">
+                <label>Nom du candidat / Étudiant :</label>
+                <input type="text" id="cand-name" placeholder="Ex: Dr. Diallo">
+            </div>
+            <div class="input-group">
+                <label>Examinateur :</label>
+                <input type="text" id="cand-exam" value="Dr. Ignacio Pellín">
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de transmission MIST -->
+    <div class="mist-card">
+        <div class="mist-header" onclick="toggleMist()">
+            <span>📋 Script de présentation du cas (Format MIST)</span>
+            <span id="mist-arrow">▼</span>
+        </div>
+        <div class="mist-content" id="mist-body">
+            <div class="mist-item">
+                <strong>M — Mécanisme :</strong> Homme de 24 ans, accident de moto à haute vélocité sans casque contre un semi-remorque (collision frontale puis glissement sous la remorque). Dégâts majeurs sur la moto.
+            </div>
+            <div class="mist-item">
+                <strong>I — Lésions suspectées (Injuries) :</strong> Traumatisme crânien sévère (plaie du scalp active, dépression osseuse), traumatisme maxillo-facial massif avec saignement oropharyngé et obstruction des voies aériennes, suspicion de lésion cervicale, traumatisme thoracique fermé gauche, fracture ouverte du fémur gauche très hémorragique avec déformation et pouls distaux abolis, déformation du poignet gauche.
+            </div>
+            <div class="mist-item">
+                <strong>S — Signes vitaux à l'arrivée (Signs) :</strong> PA = 80/40 mmHg (état de choc classe III-IV), FC = 140 bpm, FR = 40/min (bruyante, stridor/encombrement), cyanose centrale, GCS initial 7 (E2, V1, M4 — ne réagit qu'à la stimulation douloureuse).
+            </div>
+            <div class="mist-item">
+                <strong>T — Traitements administrés (Treatments) :</strong> Minerve cervicale rigide, canule oropharyngée (sans succès pour libérer la respiration), O₂ au masque à 8 L/min, pansements compressifs cuisse et scalp (tous deux saturés de sang), attelle poignet gauche, planche dorsale rigide.
+            </div>
+        </div>
+    </div>
+
+    <!-- Consignes pour l'acteur / Patient simulé -->
+    <div class="actor-clues">
+        <strong>🎭 Rappel pour l'acteur / simulation :</strong> Gémissements faibles à la douleur, détresse respiratoire majeure au début. Respiration devient silencieuse et régulière après cricothyroïdotomie. <strong>Règle d'or :</strong> Si le candidat hyperextend le cou ou effectue un logroll sans alignement strict, arrêter immédiatement tout mouvement des membres inférieurs (signe de lésion médullaire iatrogène).
+    </div>
+
+    <!-- FAUTES FATALES (DISQUALIFICATION IMMÉDIATE) -->
+    <div class="fatal-card">
+        <h3>⚠️ Erreurs Fatales / Éliminatoires (Échec immédiat)</h3>
+        <p style="font-size:0.8rem; color:#991b1b; margin-top:0;">Cocher si le candidat commet l'un de ces gestes iatrogènes ou omissions majeures entraînant dommage neurologique irréversible ou décès :</p>
+        
+        <div class="fatal-item" onclick="toggleFatal('fatal1')">
+            <input type="checkbox" id="fatal1" onchange="calculateScore()">
+            <label for="fatal1">1. Mobilisation en hyperextension cervicale (engendre section médullaire sur fracture de C1)</label>
+        </div>
+        <div class="fatal-item" onclick="toggleFatal('fatal2')">
+            <input type="checkbox" id="fatal2" onchange="calculateScore()">
+            <label for="fatal2">2. Acharnement à l'intubation orotrachéale / échec de réalisation de voie aérienne chirurgicale rapide</label>
+        </div>
+        <div class="fatal-item" onclick="toggleFatal('fatal3')">
+            <input type="checkbox" id="fatal3" onchange="calculateScore()">
+            <label for="fatal3">3. Tentative de pose de sonde nasogastrique (traumatisme facial massif / brèche de la base du crâne)</label>
+        </div>
+        <div class="fatal-item" onclick="toggleFatal('fatal4')">
+            <input type="checkbox" id="fatal4" onchange="calculateScore()">
+            <label for="fatal4">4. Retournement en bloc (logroll) sans stabilisation stricte de l'axe tête-cou-tronc</label>
+        </div>
+        <div class="fatal-item" onclick="toggleFatal('fatal5')">
+            <input type="checkbox" id="fatal5" onchange="calculateScore()">
+            <label for="fatal5">5. Omission du contrôle immédiat du saignement artériel / choc hémorragique non traité (fémur / scalp)</label>
+        </div>
+        <div class="fatal-item" onclick="toggleFatal('fatal6')">
+            <input type="checkbox" id="fatal6" onchange="calculateScore()">
+            <label for="fatal6">6. Omission ou retard critique de décompression thoracique gauche (hémothorax / contusion sous VPP)</label>
+        </div>
+    </div>
+
+    <!-- CHECKLIST DES 100 POINTS -->
+
+    <!-- Section Préparation & Protection -->
+    <div class="section-box">
+        <div class="section-title">
+            <span>0. Préparation & Précautions Standard</span>
+            <span>4 pts</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item1')">
+            <input type="checkbox" id="item1" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Équipement de protection individuelle (EPI : gants, masque, visière/lunettes, surblouse)</div>
+            <div class="item-points">2 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item2')">
+            <input type="checkbox" id="item2" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Vérification du matériel d'aspiration, d'intubation et du kit chirurgical de voie aérienne</div>
+            <div class="item-points">2 pts</div>
+        </div>
+    </div>
+
+    <!-- Section A -->
+    <div class="section-box">
+        <div class="section-title">
+            <span>A — Voies Aériennes & Contrôle Cervical</span>
+            <span>22 pts</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item3')">
+            <input type="checkbox" id="item3" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Maintien strict de l'axe en ligne tête-cou (immobilisation bimanuelle ou maintien lors de l'ouverture du collier)</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item4')">
+            <input type="checkbox" id="item4" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Aspiration prudente et évacuation du sang/débris bucco-nasopharyngés sous contrôle de la vue</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item5')">
+            <input type="checkbox" id="item5" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Reconnaissance de l'obstruction sévère par le fracas maxillo-facial et de l'inefficacité des manœuvres simples</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item6')">
+            <input type="checkbox" id="item6" class="score-check" data-pts="4" onchange="calculateScore()">
+            <div class="item-text">Indication formelle d'une voie aérienne chirurgicale définitive (IOT impossible du fait du traumatisme maxillo-facial massif)</div>
+            <div class="item-points">4 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item7')">
+            <input type="checkbox" id="item7" class="score-check" data-pts="6" onchange="calculateScore()">
+            <div class="item-text">Réalisation de la cricothyroïdotomie chirurgicale : repères corrects (membrane crico-thyroïdienne), incision, canulation</div>
+            <div class="item-points">6 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item8')">
+            <input type="checkbox" id="item8" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Fixation sécurisée de la canule et raccordement à l'oxygène haute concentration / ventilation assistée</div>
+            <div class="item-points">3 pts</div>
+        </div>
+    </div>
+
+    <!-- Section B -->
+    <div class="section-box">
+        <div class="section-title">
+            <span>B — Respiration & Ventilation</span>
+            <span>15 pts</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item9')">
+            <input type="checkbox" id="item9" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Exposition du thorax, inspection : asymétrie, respiration paradoxale, contusions pariétales gauches</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item10')">
+            <input type="checkbox" id="item10" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Palpation : recherche d'emphysème sous-cutané et de crépitations/fractures costales à gauche</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item11')">
+            <input type="checkbox" id="item11" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Auscultation : constate la diminution bilatérale des murmures vésiculaires (prédominante à gauche)</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item12')">
+            <input type="checkbox" id="item12" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Percussion : identifie la matité gauche (hémothorax) et exclut le tympanisme d'un pneumothorax sous tension pur</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item13')">
+            <input type="checkbox" id="item13" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Ventilation assistée efficace et surveillance continue de la SpO₂ (oxymétrie de pouls)</div>
+            <div class="item-points">3 pts</div>
+        </div>
+    </div>
+
+    <!-- Section C -->
+    <div class="section-box">
+        <div class="section-title">
+            <span>C — Circulation & Contrôle des Hémorragies</span>
+            <span>22 pts</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item14')">
+            <input type="checkbox" id="item14" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Reconnaissance rapide du choc hémorragique sévère (PA 80/40, FC 140 bpm, pâleur, collapsus)</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item15')">
+            <input type="checkbox" id="item15" class="score-check" data-pts="4" onchange="calculateScore()">
+            <div class="item-text">Retrait des pansements saturés et contrôle immédiat par compression directe du saignement fémoral</div>
+            <div class="item-points">4 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item16')">
+            <input type="checkbox" id="item16" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Hémostase locale efficace du scalp (compression directe ou clampage / sutures rapides hémostatiques)</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item17')">
+            <input type="checkbox" id="item17" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Pose immédiate d'une attelle de traction de jambe (réduction de l'espace hémorragique, restauration du flux)</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item18')">
+            <input type="checkbox" id="item18" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Pose de 2 abords veineux périphériques de gros calibre (14-16G) + prélèvements sanguins (Groupe, Rh, RAI, gaz)</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item19')">
+            <input type="checkbox" id="item19" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Administration de solutés cristalloïdes tiédis (1000 mL) et évaluation de la réponse hémodynamique</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item20')">
+            <input type="checkbox" id="item20" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Déclenchement du protocole de transfusion massive et commande de culots globulaires O négatif tiédis</div>
+            <div class="item-points">3 pts</div>
+        </div>
+    </div>
+
+    <!-- Section D -->
+    <div class="section-box">
+        <div class="section-title">
+            <span>D — Évaluation Neurologique (Disability)</span>
+            <span>8 pts</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item21')">
+            <input type="checkbox" id="item21" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Calcul précis du score de Glasgow initial : E2, V1 (crico), M4 = GCS 7 (coma traumatique grave)</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item22')">
+            <input type="checkbox" id="item22" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Examen pupillaire complet (symétrie, diamètre modéré, réactivité diminuée bilatéralement)</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item23')">
+            <input type="checkbox" id="item23" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Mesures de neuroprotection (maintien PAM adéquate, normocapnie, oxygénation stricte contre ACSOS)</div>
+            <div class="item-points">2 pts</div>
+        </div>
+    </div>
+
+    <!-- Section E -->
+    <div class="section-box">
+        <div class="section-title">
+            <span>E — Exposition & Contrôle de l'Environnement</span>
+            <span>5 pts</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item24')">
+            <input type="checkbox" id="item24" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Déshabillage complet du patient avec découpe des vêtements résiduels pour inspection 360°</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item25')">
+            <input type="checkbox" id="item25" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Prévention active de l'hypothermie (couvertures chaudes, solutés tièdes, contrôle température de la pièce)</div>
+            <div class="item-points">2 pts</div>
+        </div>
+    </div>
+
+    <!-- Adjuvants à l'évaluation primaire -->
+    <div class="section-box">
+        <div class="section-title">
+            <span>Adjuvants à l'Évaluation Primaire & Réanimation</span>
+            <span>8 pts</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item26')">
+            <input type="checkbox" id="item26" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Monitoring continu : ECG (tachycardie sinusale), saturomètre (SpO₂), capnographie si dispo</div>
+            <div class="item-points">2 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item26b')">
+            <input type="checkbox" id="item26b" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Sonde urinaire posée après vérification du méat urinaire et toucher rectal (50 mL urine claire)</div>
+            <div class="item-points">2 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item28')">
+            <input type="checkbox" id="item28" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Pose exclusive d'une sonde orogastrique (SOG) avec contre-indication absolue de la sonde nasogastrique</div>
+            <div class="item-points">2 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item29')">
+            <input type="checkbox" id="item29" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Demande de radiographies d'urgence de réanimation (Thorax, Bassin) et échographie eFAST</div>
+            <div class="item-points">2 pts</div>
+        </div>
+    </div>
+
+    <!-- Évaluation Secondaire & Gestes Complémentaires -->
+    <div class="section-box">
+        <div class="section-title">
+            <span>Évaluation Secondaire & Gestes Complémentaires</span>
+            <span>10 pts</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item30')">
+            <input type="checkbox" id="item30" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Thoracostomie avec pose de drain thoracique gauche (repères anatomiques 4-5e EIC ligne axillaire moyenne)</div>
+            <div class="item-points">3 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item31')">
+            <input type="checkbox" id="item31" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Examen crâne/face/cou : identifie la fracture temporale enfoncée et maintient l'alignement de C1</div>
+            <div class="item-points">2 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item32')">
+            <input type="checkbox" id="item32" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Examen membres & dos : immobilisation poignet G, réévaluation pouls distaux pédieux, logroll avec axe strict</div>
+            <div class="item-points">2 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item33')">
+            <input type="checkbox" id="item33" class="score-check" data-pts="3" onchange="calculateScore()">
+            <div class="item-text">Administration de la sérothérapie / anatoxine antitétanique et antibiothérapie précoce pour fracture ouverte</div>
+            <div class="item-points">3 pts</div>
+        </div>
+    </div>
+
+    <!-- Décision de Transfert / Réanimation définitive -->
+    <div class="section-box">
+        <div class="section-title">
+            <span>Transfert Inter-Hospitalier & Prise en Charge Définitive</span>
+            <span>6 pts</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item34')">
+            <input type="checkbox" id="item34" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Identification précoce du besoin impératif de transfert vers un centre de traumatologie / neurochirurgie</div>
+            <div class="item-points">2 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item35')">
+            <input type="checkbox" id="item35" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Communication directe médecin à médecin (chirurgien receveur) avec synthèse clinique claire</div>
+            <div class="item-points">2 pts</div>
+        </div>
+        <div class="check-item" onclick="toggleCheck('item36')">
+            <input type="checkbox" id="item36" class="score-check" data-pts="2" onchange="calculateScore()">
+            <div class="item-text">Organisation du transport médicalisé (escorte médicale, monitorage sous VPP, culots globulaires emportés)</div>
+            <div class="item-points">2 pts</div>
+        </div>
+    </div>
+
+    <!-- Fixed Bottom Bar for iPad -->
+    <div class="bottom-bar">
+        <div class="score-info">
+            <span class="score-label">Score Global (Total 100 pts)</span>
+            <span class="score-number" id="score-display">0 / 100 (0 %)</span>
+        </div>
+        <div id="verdict-display" class="status-badge badge-refuse">
+            Non Admis (< 70%)
+        </div>
+    </div>
+
+    <script>
+        function toggleCheck(id) {
+            const cb = document.getElementById(id);
+            if (!cb) return;
+            cb.checked = !cb.checked;
+            cb.parentElement.classList.toggle('checked', cb.checked);
+            calculateScore();
+        }
+
+        function toggleFatal(id) {
+            const cb = document.getElementById(id);
+            if (!cb) return;
+            calculateScore();
+        }
+
+        document.querySelectorAll('input[type="checkbox"]').forEach(box => {
+            box.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (box.classList.contains('score-check')) {
+                    box.parentElement.classList.toggle('checked', box.checked);
+                }
+                calculateScore();
+            });
+        });
+
+        function toggleMist() {
+            const body = document.getElementById('mist-body');
+            const arrow = document.getElementById('mist-arrow');
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                arrow.textContent = '▼';
+            } else {
+                body.style.display = 'none';
+                arrow.textContent = '▲';
+            }
+        }
+
+        function calculateScore() {
+            const fatals = [
+                document.getElementById('fatal1')?.checked,
+                document.getElementById('fatal2')?.checked,
+                document.getElementById('fatal3')?.checked,
+                document.getElementById('fatal4')?.checked,
+                document.getElementById('fatal5')?.checked,
+                document.getElementById('fatal6')?.checked
+            ];
+            const hasFatal = fatals.some(f => f === true);
+
+            let totalPts = 0;
+            const items = document.querySelectorAll('.score-check');
+            items.forEach(item => {
+                if (item.checked) {
+                    totalPts += parseInt(item.getAttribute('data-pts'), 10);
+                }
+            });
+
+            const scoreDisplay = document.getElementById('score-display');
+            scoreDisplay.textContent = `${totalPts} / 100 (${totalPts} %)`;
+
+            const verdict = document.getElementById('verdict-display');
+
+            if (hasFatal) {
+                verdict.className = 'status-badge badge-fatal';
+                verdict.textContent = 'ÉCHEC CRITIQUE (Faute Fatale)';
+            } else if (totalPts >= 70) {
+                verdict.className = 'status-badge badge-admis';
+                verdict.textContent = 'ADMIS (≥ 70%)';
+            } else {
+                verdict.className = 'status-badge badge-refuse';
+                verdict.textContent = 'NON ADMIS (< 70%)';
+            }
+        }
+
+        function resetForm() {
+            if (confirm("Réinitialiser l'évaluation pour le prochain candidat ?")) {
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                    cb.checked = false;
+                    if (cb.parentElement.classList.contains('check-item')) {
+                        cb.parentElement.classList.remove('checked');
+                    }
+                });
+                document.getElementById('cand-name').value = '';
+                calculateScore();
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+        }
+    </script>
+</body>
+</html>
